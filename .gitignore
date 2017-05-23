@@ -1,2 +1,11 @@
+out/*
+
+src/*~
+
+bin/*
+
+src/obj/*
+
+*.pdf
 
 AddedGeantPythia
