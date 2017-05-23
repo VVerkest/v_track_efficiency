@@ -1,0 +1,42 @@
+void Pythia8Plot(){
+  
+  const float pi = 3.141592;
+
+  string chargeBias = "all";   //  OPTIONS: "charged" or "all"
+  string ptCutStatus = "ptCut";   //  OPTIONS: "ptCut" or "ptUncut"
+  string etaCutStatus = "etaCut";   //  OPTIONS: "etaCut" or "etaUncut"
+  bool useEfficiency = false;   //  80% efficiency of charged particles
+
+  string particleSettings = ( chargeBias + "_" + ptCutStatus + "_" + etaCutStatus ).c_str();
+  if (useEfficiency == true) { particleSettings += "_efficiency"; }
+  
+  string inFileName = "out/pythia8TrackEfficiency_"; 
+  inFileName += particleSettings;    inFileName += ".root";
+  string fileSaveName = "histos/pythia8TrackEfficiency_";
+  fileSaveName += particleSettings;    fileSaveName += ".root";
+
+  TFile* pythia8FILE = new TFile( (inFileName).c_str() , "READ" );     // Read in data file
+
+  TFile *fout = new TFile( (fileSaveName).c_str() ,"RECREATE");    // create a new Root file
+
+  //  gather histograms
+  TH3D* h_all_EtaPhiPt = (TH3D*) pythia8FILE->Get("all_EtaPhiPt");                          //h_all_EtaPhiPt->Write();
+  TH3D* h_allcons_EtaPhiPt = (TH3D*) pythia8FILE->Get("allcons_EtaPhiPt");           //h_allcons_EtaPhiPt->Write();
+  TH3D* h_lead_EtaPhiPt = (TH3D*) pythia8FILE->Get("lead_EtaPhiPt");                     //h_lead_EtaPhiPt->Write();
+  TH3D* h_leadcons_EtaPhiPt = (TH3D*) pythia8FILE->Get("leadcons_EtaPhiPt");      //h_leadcons_EtaPhiPt->Write();
+
+  //  Project histograms
+  TH2D* h_all_EtaPt = (TH2D*) h_all_EtaPhiPt->Project3D("ZX");  h_all_EtaPt->SetName("all_EtaPt");
+  TH2D* h_allcons_EtaPt = (TH2D*) h_allcons_EtaPhiPt->Project3D("ZX");  h_allcons_EtaPt->SetName("allcons_EtaPt");
+  TH1D* h_all_Pt = (TH1D*) h_all_EtaPt->ProjectionY();  h_all_Pt->SetName("all_Pt");
+  TH1D* h_allcons_Pt = (TH1D*) h_allcons_EtaPt->ProjectionY();  h_allcons_Pt->SetName("allcons_Pt");
+  
+  TH2D* h_lead_EtaPt = (TH2D*) h_lead_EtaPhiPt->Project3D("ZX");                           h_lead_EtaPt->SetName("lead_EtaPt");
+  TH2D* h_leadcons_EtaPt = (TH2D*) h_leadcons_EtaPhiPt->Project3D("ZX");            h_leadcons_EtaPt->SetName("leadcons_EtaPt");
+  TH1D* h_lead_Pt = (TH1D*) h_lead_EtaPt->ProjectionY();                                         h_lead_Pt->SetName("lead_Pt");
+  TH1D* h_leadcons_Pt = (TH1D*) h_leadcons_EtaPt->ProjectionY();                          h_leadcons_Pt->SetName("leadcons_Pt");
+
+  fout->Write();  
+  fout->Close();  
+
+}
