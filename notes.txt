@@ -1,0 +1,8 @@
+
+compare statistics from pythia 8 to pythia 6 statistics (by bin)
+	--> compare: pt dist, charged constituents (NEF)
+	(more neutral particles in pythia 6 because of fewer decays)
+
+LIMIT PYTHIA EFFICIENCY TRACKING TO CHARGED PARTICLES
+
+produce pt distributions for each bin
