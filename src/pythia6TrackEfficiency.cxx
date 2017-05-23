@@ -52,6 +52,8 @@ int main() {
   string particleSettings = ( chargeBias + "_" + ptCutStatus + "_" + etaCutStatus ).c_str();
   if (useEfficiency == true) { particleSettings += "_efficiency"; }
   outFileName += particleSettings;    outFileName += ".root";
+
+  cout<< "Writing to:  " << outFileName <<endl;
   
   TStopwatch TimeKeeper;  //Start a timer
   TimeKeeper.Start( );

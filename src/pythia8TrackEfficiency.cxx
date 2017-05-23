@@ -28,16 +28,18 @@ using namespace std;
 
 int main() {
 
-  string chargeBias = "all";   //  OPTIONS: "charged" or "all"
+  string chargeBias = "charged";   //  OPTIONS: "charged" or "all"
   string ptCutStatus = "ptCut";   //  OPTIONS: "ptCut" or "ptUncut"
   string etaCutStatus = "etaCut";   //  OPTIONS: "etaCut" or "etaUncut"
-  bool useEfficiency = "false";   //  80% efficiency of charged particles
+  bool useEfficiency = false;   //  80% efficiency of charged particles
 
   string outFileName = "out/pythia8TrackEfficiency_";
   string particleSettings = ( chargeBias + "_" + ptCutStatus + "_" + etaCutStatus ).c_str();
   if (useEfficiency == true) { particleSettings += "_efficiency"; }
   outFileName += particleSettings;
   outFileName += ".root";
+
+  cout<< "Writing to:  " << outFileName <<endl;
     
   TH1::SetDefaultSumw2();  // error bars on histos
   TH2::SetDefaultSumw2();
