@@ -38,8 +38,6 @@ int main() {
   if (useEfficiency == true) { particleSettings += "_efficiency"; }
   outFileName += particleSettings;
   outFileName += ".root";
-
-  cout<< "Writing to:  " << outFileName <<endl;
     
   TH1::SetDefaultSumw2();  // error bars on histos
   TH2::SetDefaultSumw2();
@@ -102,13 +100,12 @@ int main() {
   aout->Branch("h_allcons_EtaPhiPt", &h_allcons_EtaPhiPt);
   vector<PseudoJet> all_rawJets;
   vector<PseudoJet> lead_rawJets;
-  
 
   for (unsigned iEvent = 0; iEvent < 100000; ++iEvent) {    //  BEGIN EVENT LOOP
+    if ( iEvent == 50 ) { cout<< "Writing to:  " << outFileName <<endl; }
+    if (!pythia.next()) continue;
     
     all_rawJets.clear(); lead_rawJets.clear();   //  clear all containers
-
-    if (!pythia.next()) continue;
 
     for (int h = 0; h < pythia.event.size(); ++h) {    // loop over all FINAL particles
       
