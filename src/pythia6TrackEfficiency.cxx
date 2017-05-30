@@ -121,10 +121,14 @@ int main() {
   reader.SetProcessV0s(false);
   reader.Init( -1 ); //runs through all events with -1
   
-  TH3D* h_all_EtaPhiPt = new TH3D("all_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
-  TH3D* h_lead_EtaPhiPt = new TH3D("lead_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
-  TH3D* h_leadcons_EtaPhiPt = new TH3D("leadcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
-  TH3D* h_allcons_EtaPhiPt = new TH3D("allcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
+  // TH3D* h_all_EtaPhiPt = new TH3D("all_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
+  // TH3D* h_allcons_EtaPhiPt = new TH3D("allcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
+  // TH3D* h_lead_EtaPhiPt = new TH3D("lead_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
+  // TH3D* h_leadcons_EtaPhiPt = new TH3D("leadcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
+  TH3D* h_all_EtaPhiPt = new TH3D("all_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
+  TH3D* h_allcons_EtaPhiPt = new TH3D("allcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
+  TH3D* h_lead_EtaPhiPt = new TH3D("lead_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
+  TH3D* h_leadcons_EtaPhiPt = new TH3D("leadcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
   aout->Branch("h_all_EtaPhiPt", &h_all_EtaPhiPt);
   aout->Branch("h_lead_EtaPhiPt", &h_lead_EtaPhiPt);
   aout->Branch("h_leadcons_EtaPhiPt", &h_leadcons_EtaPhiPt);
@@ -238,8 +242,10 @@ int main() {
       
 	vector<PseudoJet> rawleadjetcons = allRawJets[0].constituents();     //  Leading Jet Constituents
 	for (int j = 0; j < rawleadjetcons.size(); ++ j) {
-	  h_leadcons_EtaPhiPt->Fill(rawleadjetcons[j].eta(), rawleadjetcons[j].phi_std(), rawleadjetcons[j].pt());
-	  h_leadcons_EtaPhiPt->SetTitle("All Raw Lead Jet Constituents");
+	  if ( abs( rawleadjetcons[j].eta() )<=(1.0) ) {
+	    h_leadcons_EtaPhiPt->Fill(rawleadjetcons[j].eta(), rawleadjetcons[j].phi_std(), rawleadjetcons[j].pt());
+	    h_leadcons_EtaPhiPt->SetTitle("All Raw Lead Jet Constituents");
+	  }
 	}
 
 	for (int i=0; i<allRawJets.size(); ++i) {
@@ -247,8 +253,10 @@ int main() {
 	  h_all_EtaPhiPt->SetTitle("All Raw Jets");
 	  vector<PseudoJet> allrawjetcons = allRawJets[i].constituents();     //  Leading Jet Constituents
 	  for (int j = 0; j < allrawjetcons.size(); ++ j) {
-	    h_allcons_EtaPhiPt->Fill(allrawjetcons[j].eta(), allrawjetcons[j].phi_std(), allrawjetcons[j].pt());
-	    h_allcons_EtaPhiPt->SetTitle("All Raw Jet Constituents");
+	    if ( abs( allrawjetcons[j].eta() )<=(1.0) ) {
+	      h_allcons_EtaPhiPt->Fill(allrawjetcons[j].eta(), allrawjetcons[j].phi_std(), allrawjetcons[j].pt());
+	      h_allcons_EtaPhiPt->SetTitle("All Raw Jet Constituents");
+	    }
 	  }
 	}
       }
