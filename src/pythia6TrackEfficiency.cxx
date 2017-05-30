@@ -43,7 +43,7 @@ using namespace std;
 
 int main() {
 
-  string chargeBias = "charged";   //  OPTIONS: "charged" or "all"
+  string chargeBias = "all";   //  OPTIONS: "charged" or "all"
   string ptCutStatus = "ptCut";   //  OPTIONS: "ptCut" or "ptUncut"
   string etaCutStatus = "etaCut";   //  OPTIONS: "etaCut" or "etaUncut"
   bool useEfficiency = false;   //  80% efficiency of charged particles
@@ -52,8 +52,6 @@ int main() {
   string particleSettings = ( chargeBias + "_" + ptCutStatus + "_" + etaCutStatus ).c_str();
   if (useEfficiency == true) { particleSettings += "_efficiency"; }
   outFileName += particleSettings;    outFileName += ".root";
-
-  cout<< "Writing to:  " << outFileName <<endl;
   
   TStopwatch TimeKeeper;  //Start a timer
   TimeKeeper.Start( );
@@ -145,14 +143,13 @@ int main() {
   int nEvents = 0;
   int nHardJets = 0;
   int nMatchedHard = 0;
-  
 
   while ( reader.NextEvent() ) {       //  BEGIN EVENT LOOP!
     all_rawJets.clear();   //  clear all containers
-
+    if ( nEvents == 0 ) { cout<< "Writing to:  " << outFileName <<endl; }
+    
     nEvents++;
-    reader.PrintStatus(10);      // Print out reader status every 10 seconds
-
+    reader.PrintStatus(5);      // Print out reader status every 10 seconds
     event = reader.GetEvent();           // Get the event header and event
     header = event->GetHeader();
 
