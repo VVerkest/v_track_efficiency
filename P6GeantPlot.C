@@ -1,11 +1,11 @@
-void Pythia6Plot(){
+void P6GeantPlot(){
   
   const float pi = 3.141592;
 
   string chargeBias = "all";   //  OPTIONS: "charged" or "all"
   string ptCutStatus = "ptCut";   //  OPTIONS: "ptCut" or "ptUncut"
   string etaCutStatus = "etaCut";   //  OPTIONS: "etaCut" or "etaUncut"
-  bool useEfficiency = false;   //  80% efficiency of charged particles
+  bool useEfficiency = true;   //  80% efficiency of charged particles
   bool norm = true;   //  Normalize histograms by number of events
 
   string particleSettings = ( chargeBias + "_" + ptCutStatus + "_" + etaCutStatus ).c_str();
