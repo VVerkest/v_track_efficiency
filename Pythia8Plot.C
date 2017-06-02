@@ -2,17 +2,20 @@ void Pythia8Plot(){
   
   const float pi = 3.141592;
 
-  string chargeBias = "charged";   //  OPTIONS: "charged" or "all"
+  string chargeBias = "all";   //  OPTIONS: "charged" or "all"
   string ptCutStatus = "ptCut";   //  OPTIONS: "ptCut" or "ptUncut"
   string etaCutStatus = "etaCut";   //  OPTIONS: "etaCut" or "etaUncut"
   bool useEfficiency = true;   //  80% efficiency of charged particles
+  bool norm = true;   //  Normalize histograms by number of events
 
   string particleSettings = ( chargeBias + "_" + ptCutStatus + "_" + etaCutStatus ).c_str();
   if (useEfficiency == true) { particleSettings += "_efficiency"; }
   
-  string inFileName = "out/pythia8TrackEfficiency_"; 
+  string inFileName = "out/pythia8TrackEfficiency_";                    // file to read in
   inFileName += particleSettings;    inFileName += ".root";
-  string fileSaveName = "histos/pythia8TrackEfficiency_";
+  
+  string fileSaveName = "histos/pythia8TrackEfficiency_";            // file to be written and saved
+  if (norm == true) { particleSettings += "_NORM"; }
   fileSaveName += particleSettings;    fileSaveName += ".root";
 
   TFile* pythia8FILE = new TFile( (inFileName).c_str() , "READ" );     // Read in data file
@@ -39,21 +42,52 @@ void Pythia8Plot(){
   string pdfSaveName_BASE = ( "histos/pdfs/p8_" + particleSettings + "_" ).c_str();
   string pdfSaveName;
   TCanvas *c1 = new TCanvas("c1", "c1", 800, 600);
-
   
   //  save 2D & 3D histograms as .pdf images in "histos/pdfs"
-  pdfSaveName = (pdfSaveName_BASE + "all_EtaPt.pdf" ).c_str();             h_all_EtaPt->Draw();             c1->SaveAs( (pdfSaveName).c_str() );
-  pdfSaveName = (pdfSaveName_BASE + "allcons_EtaPt.pdf" ).c_str();      h_allcons_EtaPt->Draw();      c1->SaveAs( (pdfSaveName).c_str() );
-  pdfSaveName = (pdfSaveName_BASE + "lead_EtaPt.pdf" ).c_str();           h_lead_EtaPt->Draw();          c1->SaveAs( (pdfSaveName).c_str() );
-  pdfSaveName = (pdfSaveName_BASE + "leadcons_EtaPt.pdf" ).c_str();    h_leadcons_EtaPt->Draw();   c1->SaveAs( (pdfSaveName).c_str() );
+  pdfSaveName = (pdfSaveName_BASE + "all_EtaPt.pdf" ).c_str();
+  if ( norm == true) { h_all_EtaPt->DrawNormalized( "COLZ" ); }
+  else { h_all_EtaPt->Draw( "COLZ" ); }
+  c1->SaveAs( (pdfSaveName).c_str() );
+  
+  pdfSaveName = (pdfSaveName_BASE + "allcons_EtaPt.pdf" ).c_str();
+  if ( norm == true) { h_allcons_EtaPt->DrawNormalized( "COLZ" ); }
+  else { h_allcons_EtaPt->Draw( "COLZ" ); }
+  c1->SaveAs( (pdfSaveName).c_str() );
+  
+  pdfSaveName = (pdfSaveName_BASE + "lead_EtaPt.pdf" ).c_str();
+  if ( norm == true) { h_lead_EtaPt->DrawNormalized( "COLZ" ); }
+  else { h_lead_EtaPt->Draw( "COLZ" ); }
+  c1->SaveAs( (pdfSaveName).c_str() );
+  
+  pdfSaveName = (pdfSaveName_BASE + "leadcons_EtaPt.pdf" ).c_str();
+  if ( norm == true ) { h_leadcons_EtaPt->DrawNormalized( "COLZ" ); }
+  else { h_leadcons_EtaPt->Draw( "COLZ" ); }
+  c1->SaveAs( (pdfSaveName).c_str() );
 
+  
   c1->SetLogy();
+
   
-  pdfSaveName = (pdfSaveName_BASE + "all_Pt.pdf" ).c_str();                  h_all_Pt->Draw();                   c1->SaveAs( (pdfSaveName).c_str() );
-  pdfSaveName = (pdfSaveName_BASE + "allcons_Pt.pdf" ).c_str();           h_allcons_Pt->Draw();            c1->SaveAs( (pdfSaveName).c_str() );
-  pdfSaveName = (pdfSaveName_BASE + "lead_Pt.pdf" ).c_str();                h_lead_Pt->Draw();                c1->SaveAs( (pdfSaveName).c_str() );
-  pdfSaveName = (pdfSaveName_BASE + "leadcons_Pt.pdf" ).c_str();         h_leadcons_Pt->Draw();         c1->SaveAs( (pdfSaveName).c_str() );  
+  pdfSaveName = (pdfSaveName_BASE + "all_Pt.pdf" ).c_str();
+  if ( norm == true ) { h_all_Pt->DrawNormalized(); }
+  else { h_all_Pt->Draw(); }
+  c1->SaveAs( (pdfSaveName).c_str() );
+
+  pdfSaveName = (pdfSaveName_BASE + "allcons_Pt.pdf" ).c_str();
+  if ( norm == true ) { h_allcons_Pt->DrawNormalized(); }
+  else { h_allcons_Pt->Draw(); }
+  c1->SaveAs( (pdfSaveName).c_str() );
   
+  pdfSaveName = (pdfSaveName_BASE + "lead_Pt.pdf" ).c_str();
+  if ( norm == true ) { h_lead_Pt->DrawNormalized(); }
+  else { h_lead_Pt->Draw(); }
+  c1->SaveAs( (pdfSaveName).c_str() );
+  
+  pdfSaveName = (pdfSaveName_BASE + "leadcons_Pt.pdf" ).c_str();
+  if ( norm == true ) { h_leadcons_Pt->DrawNormalized(); }
+  else { h_leadcons_Pt->Draw(); }
+  c1->SaveAs( (pdfSaveName).c_str() );  
+
 
   fout->Write();  
   fout->Close();  
