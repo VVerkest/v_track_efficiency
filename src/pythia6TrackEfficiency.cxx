@@ -76,8 +76,8 @@ int main() {
   std::uniform_real_distribution<> dis(0.0, 1.0);
 
   TFile *fout = new TFile( (outFileName).c_str() ,"RECREATE");  // Create ONE output file
-  TTree *aout = new TTree("Pythia6Jets","Pythia6Jets"); // Create a raw jet output tree
-  TChain* chain = new TChain( "JetTree" );
+  TTree *Pythia6Jets = new TTree("Pythia6Jets","Pythia6Jets"); // Create a raw jet output tree
+  TChain* chain = new TChain( "JetTreeMc" );
   chain->Add( "AddedGeantPythia/picoDst_25_35*" );
 
   string collisionType = "pp";
@@ -127,10 +127,10 @@ int main() {
   TH3D* h_allcons_EtaPhiPt = new TH3D("allcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
   TH3D* h_lead_EtaPhiPt = new TH3D("lead_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
   TH3D* h_leadcons_EtaPhiPt = new TH3D("leadcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
-  aout->Branch("h_all_EtaPhiPt", &h_all_EtaPhiPt);
-  aout->Branch("h_lead_EtaPhiPt", &h_lead_EtaPhiPt);
-  aout->Branch("h_leadcons_EtaPhiPt", &h_leadcons_EtaPhiPt);
-  aout->Branch("h_allcons_EtaPhiPt", &h_allcons_EtaPhiPt);
+  // Pythia6Jets->Branch("h_all_EtaPhiPt", &h_all_EtaPhiPt);
+  // Pythia6Jets->Branch("h_lead_EtaPhiPt", &h_lead_EtaPhiPt);
+  // Pythia6Jets->Branch("h_leadcons_EtaPhiPt", &h_leadcons_EtaPhiPt);
+  // Pythia6Jets->Branch("h_allcons_EtaPhiPt", &h_allcons_EtaPhiPt);
 
   // Data classes
   TStarJetVectorContainer<TStarJetVector>* container;
@@ -260,9 +260,8 @@ int main() {
     }
   }    //  END EVENT LOOP
 
-  aout->Write();
   fout->Write();
-  fout->Close();
+  // fout->Close();
   
   return 0;
 }
