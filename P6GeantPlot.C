@@ -2,10 +2,10 @@ void P6GeantPlot(){
   
   const float pi = 3.141592;
 
-  string chargeBias = "all";   //  OPTIONS: "charged" or "all"
+  string chargeBias = "charged";   //  OPTIONS: "charged" or "all"
   string ptCutStatus = "ptCut";   //  OPTIONS: "ptCut" or "ptUncut"
   string etaCutStatus = "etaCut";   //  OPTIONS: "etaCut" or "etaUncut"
-  bool useEfficiency = true;   //  80% efficiency of charged particles
+  bool useEfficiency = false;   //  80% efficiency of charged particles
   bool norm = true;   //  Normalize histograms by number of events
 
   string particleSettings = ( chargeBias + "_" + ptCutStatus + "_" + etaCutStatus ).c_str();
@@ -14,7 +14,7 @@ void P6GeantPlot(){
   string inFileName = "out/p6GeantTrackEfficiency_";                   // file to read in
   inFileName += particleSettings;    inFileName += ".root";
   
-  string fileSaveName = "histos/p6GeantTrackEfficiency_";            // file to be written and saved
+  string fileSaveName = "histos/p6Geant/p6GeantTrackEfficiency_";            // file to be written and saved
   if (norm == true) { particleSettings += "_NORM"; }
   fileSaveName += particleSettings;    fileSaveName += ".root";
 

@@ -2,7 +2,7 @@ void Pythia6Plot(){
   
   const float pi = 3.141592;
 
-  string chargeBias = "all";   //  OPTIONS: "charged" or "all"
+  string chargeBias = "charged";   //  OPTIONS: "charged" or "all"
   string ptCutStatus = "ptCut";   //  OPTIONS: "ptCut" or "ptUncut"
   string etaCutStatus = "etaCut";   //  OPTIONS: "etaCut" or "etaUncut"
   bool useEfficiency = false;   //  80% efficiency of charged particles
@@ -14,7 +14,7 @@ void Pythia6Plot(){
   string inFileName = "out/pythia6TrackEfficiency_";                   // file to read in
   inFileName += particleSettings;    inFileName += ".root";
   
-  string fileSaveName = "histos/pythia6TrackEfficiency_";            // file to be written and saved
+  string fileSaveName = "histos/p6/pythia6TrackEfficiency_";            // file to be written and saved
   if (norm == true) { particleSettings += "_NORM"; }
   fileSaveName += particleSettings;    fileSaveName += ".root";
 
