@@ -60,18 +60,20 @@ $(BDIR)/%  : $(ODIR)/%.o
 ###############################################################################
 ############################# Main Targets ####################################
 ###############################################################################
-all : $(BDIR)/vTrackEfficiency $(BDIR)/pythia8TrackEfficiency $(BDIR)/pythia6TrackEfficiency
+all : $(BDIR)/pythia8TrackEfficiency $(BDIR)/pythia6TrackEfficiency $(BDIR)/p6GeantTrackEfficiency
 
 #$(ODIR)/qa_v1.o 		: $(SDIR)/qa_v1.cxx
 $(ODIR)/vTrackEfficiency.o : $(SDIR)/vTrackEfficiency.cxx
 $(ODIR)/pythia8TrackEfficiency.o : $(SDIR)/pythia8TrackEfficiency.cxx
 $(ODIR)/pythia6TrackEfficiency.o : $(SDIR)/pythia6TrackEfficiency.cxx
+$(ODIR)/p6GeantTrackEfficiency.o : $(SDIR)/p6GeantTrackEfficiency.cxx
 
 #data analysis
 #$(BDIR)/qa_v1		: $(ODIR)/qa_v1.o
 $(BDIR)/vTrackEfficiency  : $(ODIR)/vTrackEfficiency.o
 $(BDIR)/pythia8TrackEfficiency  : $(ODIR)/pythia8TrackEfficiency.o
 $(BDIR)/pythia6TrackEfficiency  : $(ODIR)/pythia6TrackEfficiency.o
+$(BDIR)/p6GeantTrackEfficiency  : $(ODIR)/p6GeantTrackEfficiency.o
 
 ###############################################################################
 ##################################### MISC ####################################
