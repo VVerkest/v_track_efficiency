@@ -2,7 +2,7 @@ void Pythia8Plot(){
   
   const float pi = 3.141592;
 
-  string chargeBias = "charged";   //  OPTIONS: "charged" or "all"
+  string chargeBias = "all";   //  OPTIONS: "charged" or "all"
   string ptCutStatus = "ptCut";   //  OPTIONS: "ptCut" or "ptUncut"
   string etaCutStatus = "etaCut";   //  OPTIONS: "etaCut" or "etaUncut"
   bool useEfficiency = true;   //  80% efficiency of charged particles
@@ -15,7 +15,7 @@ void Pythia8Plot(){
   inFileName += particleSettings;    inFileName += ".root";
   
   string fileSaveName = "histos/pythia8TrackEfficiency_";            // file to be written and saved
-  if (norm == true) { particleSettings += "_NORM"; }
+  //  if (norm == true) { particleSettings += "_NORM"; }
   fileSaveName += particleSettings;    fileSaveName += ".root";
 
   TFile* pythia8FILE = new TFile( (inFileName).c_str() , "READ" );     // Read in data file
