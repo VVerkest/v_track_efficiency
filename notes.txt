@@ -6,3 +6,18 @@ compare statistics from pythia 8 to pythia 6 statistics (by bin)
 LIMIT PYTHIA EFFICIENCY TRACKING TO CHARGED PARTICLES
 
 produce pt distributions for each bin
+
+
+//////////////////
+
+6-5-17
+
+pt and number difference on jet-by-jet basis
+number of constituents without efficiency, multiplicity statistical dist
+add back particles accordingly with either p6 or p8 (to 1st order equivalent)
+
+turn on decays again! use Pythia8 "right out of the box"
+
+p6->p6+geant      pt resolution at higher pt
+
+
