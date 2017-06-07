@@ -39,7 +39,7 @@ void P6GeantPlot(){
   TH1D* h_lead_Pt = (TH1D*) h_lead_EtaPt->ProjectionY();                                    h_lead_Pt->SetName("lead_Pt");
   TH1D* h_leadcons_Pt = (TH1D*) h_leadcons_EtaPt->ProjectionY();                      h_leadcons_Pt->SetName("leadcons_Pt");
 
-  string pdfSaveName_BASE = ( "histos/pdfs/p6Geant_" + particleSettings + "_" ).c_str();
+  string pdfSaveName_BASE = ( "histos/pdfs/" + particleSettings + "/p6Geant_" + particleSettings + "_" ).c_str();
   string pdfSaveName;
   TCanvas *c1 = new TCanvas("c1", "c1", 800, 600);
 

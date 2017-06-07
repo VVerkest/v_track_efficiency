@@ -14,7 +14,7 @@ void Pythia8Plot(){
   string inFileName = "out/pythia8TrackEfficiency_";                    // file to read in
   inFileName += particleSettings;    inFileName += ".root";
   
-  string fileSaveName = "histos/p8/pythia8TrackEfficiency_";            // file to be written and saved
+  string fileSaveName = "histos/pythia8TrackEfficiency_";            // file to be written and saved
   if (norm == true) { particleSettings += "_NORM"; }
   fileSaveName += particleSettings;    fileSaveName += ".root";
 
@@ -39,7 +39,7 @@ void Pythia8Plot(){
   TH1D* h_lead_Pt = (TH1D*) h_lead_EtaPt->ProjectionY();                                    h_lead_Pt->SetName("lead_Pt");
   TH1D* h_leadcons_Pt = (TH1D*) h_leadcons_EtaPt->ProjectionY();                      h_leadcons_Pt->SetName("leadcons_Pt");
 
-  string pdfSaveName_BASE = ( "histos/pdfs/p8_" + particleSettings + "_" ).c_str();
+  string pdfSaveName_BASE = ( "histos/pdfs/p8/" + particleSettings + "/p8_" + particleSettings + "_" ).c_str();
   string pdfSaveName;
   TCanvas *c1 = new TCanvas("c1", "c1", 800, 600);
   
