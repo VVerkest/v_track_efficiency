@@ -10,6 +10,7 @@
 #include <iostream>
 #include <sstream>
 #include <TROOT.h>
+#include <TRandom.h>
 #include <TFile.h>
 #include <TTree.h>
 #include <TH1.h>
@@ -28,7 +29,7 @@ using namespace std;
 
 int main() {
 
-  string chargeBias = "charged";   //  OPTIONS: "charged" or "all"
+  string chargeBias = "all";   //  OPTIONS: "charged" or "all"
   string ptCutStatus = "ptCut";   //  OPTIONS: "ptCut" or "ptUncut"
   string etaCutStatus = "etaCut";   //  OPTIONS: "etaCut" or "etaUncut"
   bool useEfficiency = true;   //  80% efficiency of charged particles
@@ -49,16 +50,6 @@ int main() {
   double R = 0.4;     //  JET DEFINITION
   JetDefinition jet_def(antikt_algorithm, R);
 
-  //seeding pseudorandom number generator
-  auto begin = std::chrono::high_resolution_clock::now();
-
-  //generating the distribution
-  std::random_device rd;
-  std::mt19937 g(rd());
-  auto end = std::chrono::high_resolution_clock::now();
-  g.seed(std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count());
-  std::uniform_real_distribution<> dis(0.0, 1.0);
-  
   Pythia pythia;
   pythia.readString("Beams:eCM = 200.");      //  200 GeV beam
   pythia.readString("HardQCD:all = on");
@@ -86,14 +77,14 @@ int main() {
   TFile *fout = new TFile( (outFileName).c_str() ,"RECREATE");  // Create ONE output file
   TTree *Pythia8Jets = new TTree("Pythia8Jets","Pythia8Jets"); // Create a raw jet output tree
   
-  // TH3D* h_all_EtaPhiPt = new TH3D("all_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
-  // TH3D* h_allcons_EtaPhiPt = new TH3D("allcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
-  // TH3D* h_lead_EtaPhiPt = new TH3D("lead_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
-  // TH3D* h_leadcons_EtaPhiPt = new TH3D("leadcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
-  TH3D* h_all_EtaPhiPt = new TH3D("all_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
-  TH3D* h_allcons_EtaPhiPt = new TH3D("allcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
-  TH3D* h_lead_EtaPhiPt = new TH3D("lead_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
-  TH3D* h_leadcons_EtaPhiPt = new TH3D("leadcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
+  TH3D* h_all_EtaPhiPt = new TH3D("all_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
+  TH3D* h_allcons_EtaPhiPt = new TH3D("allcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
+  TH3D* h_lead_EtaPhiPt = new TH3D("lead_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
+  TH3D* h_leadcons_EtaPhiPt = new TH3D("leadcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -1, 1, 27, -pi, pi, 120, 0, 80 );
+  // TH3D* h_all_EtaPhiPt = new TH3D("all_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
+  // TH3D* h_allcons_EtaPhiPt = new TH3D("allcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
+  // TH3D* h_lead_EtaPhiPt = new TH3D("lead_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
+  // TH3D* h_leadcons_EtaPhiPt = new TH3D("leadcons_EtaPhiPt", ";#eta;#phi;p_{T}", 27, -pi, pi, 27, -pi, pi, 120, 0, 80 );
   // Pythia8Jets->Branch("h_all_EtaPhiPt", &h_all_EtaPhiPt);
   // Pythia8Jets->Branch("h_lead_EtaPhiPt", &h_lead_EtaPhiPt);
   // Pythia8Jets->Branch("h_leadcons_EtaPhiPt", &h_leadcons_EtaPhiPt);
@@ -110,72 +101,20 @@ int main() {
     for (int h = 0; h < pythia.event.size(); ++h) {    // loop over all FINAL particles
       
       if (pythia.event[h].isFinal() && pythia.event[h].isVisible()) {      //only select final state particles within particle-level eta cut
-	double effic_num = dis(g);  // generate random number
+	double effic_num = gRandom->Uniform(0.0,1.0);  // generate random number
 	PseudoJet current = PseudoJet(pythia.event[h].px(),pythia.event[h].py(),pythia.event[h].pz(),pythia.event[h].e());	//save particle charge info for later in fastjet
 	current.set_user_index(pythia.event[h].isCharged());
 
-	if ( chargeBias == "all") {
-	  if( ptCutStatus == "ptCut" && pythia.event[h].pT() >= 0.2) {
-	    if( etaCutStatus == "etaCut" && abs(pythia.event[h].eta()) <= 1.0 ) {
-	      if ( useEfficiency == true && effic_num < 0.8 && pythia.event[h].isCharged() ) {
-		all_rawJets.push_back(current);      //   all, ptCut, etaCut, & efficiency
-	      } else if ( useEfficiency == false ) {
-		all_rawJets.push_back(current);      //   all, ptCut, & etaCut
-	      }
-	    } else if( etaCutStatus == "etaUncut" ) {
-	      if ( useEfficiency == true && effic_num < 0.8 && pythia.event[h].isCharged() ) {
-		all_rawJets.push_back(current);      //   all, ptCut, etaCut, & efficiency
-	      } else if ( useEfficiency == false ) {
-		all_rawJets.push_back(current);      //   all with ptCut
-	      }
-	    }
-	  } else if ( ptCutStatus == "ptUncut" ) {
-	    if( etaCutStatus == "etaCut" && abs(pythia.event[h].eta()) <= 1.0 ) {
-	      if ( useEfficiency == true && effic_num < 0.8 && pythia.event[h].isCharged() ) {
-		all_rawJets.push_back(current);      //   all, etaCut, & efficiency
-	      } else if ( useEfficiency == false ) {
-		all_rawJets.push_back(current);      //   all with etaCut
-	      }
-	    } else if( etaCutStatus == "etaUncut" ) {
-	      if ( useEfficiency == true && effic_num < 0.8 && pythia.event[h].isCharged() ) {
-		all_rawJets.push_back(current);      //   all, etaCut, & efficiency
-	      } else if ( useEfficiency == false ) {
-		all_rawJets.push_back(current);      //   all with ptCut
-	      }
-	    }
-	  }
-	} else if ( chargeBias == "charged" && pythia.event[h].isCharged() ) {
-	  if( ptCutStatus == "ptCut" && pythia.event[h].pT() >= 0.2) {
-	    if( etaCutStatus == "etaCut" && abs(pythia.event[h].eta()) <= 1.0 ) {
-	      if ( useEfficiency == true && effic_num < 0.8 && pythia.event[h].isCharged() ) {
-		all_rawJets.push_back(current);      //   charged, ptCut, etaCut, & efficiency
-	      } else if ( useEfficiency == false ) {
-		all_rawJets.push_back(current);      //   charged, ptCut, & etaCut
-	      }
-	    } else if( etaCutStatus == "etaUncut" ) {
-	      if ( useEfficiency == true && effic_num < 0.8 && pythia.event[h].isCharged() ) {
-		all_rawJets.push_back(current);      //   charged, ptCut, etaCut, & efficiency
-	      } else if ( useEfficiency == false ) {
-		all_rawJets.push_back(current);      //   charged with ptCut
-	      }
-	    }
-	  } else if ( ptCutStatus == "ptUncut" ) {
-	    if( etaCutStatus == "etaCut" && abs(pythia.event[h].eta()) <= 1.0 ) {
-	      if ( useEfficiency == true && effic_num < 0.8 && pythia.event[h].isCharged() ) {
-		all_rawJets.push_back(current);      //   charged, etaCut, & efficiency
-	      } else if ( useEfficiency == false ) {
-		all_rawJets.push_back(current);      //   charged with etaCut
-	      }
-	    } else if( etaCutStatus == "etaUncut" ) {
-	      if ( useEfficiency == true && effic_num < 0.8 && pythia.event[h].isCharged() ) {
-		all_rawJets.push_back(current);      //   charged, etaCut, & efficiency
-	      } else if ( useEfficiency == false ) {
-		all_rawJets.push_back(current);      //   charged with ptCut
-	      }
-	    }
-	  }
+	//  All particles
+	if ( chargeBias == "charged" &&  !pythia.event[h].isCharged() )  { continue; }  // removes neutral particles
+	if ( ptCutStatus == "ptCut" && pythia.event[h].pT() < 0.2)                { continue; }  // removes particles below 0.2 GeV
+	if ( etaCutStatus == "etaCut" && abs(pythia.event[h].eta()) > 1.0 )   { continue; }  // removes particles with eta>|1|
+
+	if ( useEfficiency == false ) { all_rawJets.push_back(current); }
+	else if ( useEfficiency == true ) {                                                 // keep all uncharged particles if chargeBias == "all"
+	  if ( chargeBias == "all" && !pythia.event[h].isCharged() ) { all_rawJets.push_back(current); }  // keep all neutral particles
+	  if ( effic_num < 0.8 && pythia.event[h].isCharged() ) { all_rawJets.push_back(current); }  // keep 80% of charged particles
 	}
-	
       }
     }    //  end particle loop
     
